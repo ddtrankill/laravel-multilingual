@@ -6,9 +6,10 @@
 
 <div class="row">
     <div class="col-md-8">
+        <img src="{{ asset('images/' . $post->image) }}" height="350" width="700">
         @foreach($descriptions as $description)
             <h1>{{ $description->title }}</h1>
-            <p class="lead">{{ $description->body }}</p>
+            <p class="lead">{!! $description->body !!}</p>
             <hr>
         @endforeach
     </div>

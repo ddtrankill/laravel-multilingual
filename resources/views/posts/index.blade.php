@@ -26,7 +26,7 @@
                             <tr>
                                 <th>{{ $description->post_id }}</th>
                                 <th>{{ $description->title }}</th>
-                                <th>{{ substr($description->body, 0, 50) }}{{ strlen($description->body) > 50 ? '...' : '' }}</th>
+                                <th>{!! substr($description->body, 0, 50) !!}{!! strlen($description->body) > 50 ? '...' : '' !!}</th>
                                 <th>{{ date('M j, Y  H:i a', strtotime($description->updated_at)) }}</th>
                                 <th>
                                     <a href="{{ route('posts.show', $description->post_id) }}" class="btn btn-default btn-sm">View</a>

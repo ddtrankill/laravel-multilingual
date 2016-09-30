@@ -4,6 +4,8 @@
 
 @section('stylesheets')
     {!! Html::style('css/parsley.css') !!}
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script>tinymce.init({ selector:'textarea' });</script>
 @endsection
 
 @section('content')
@@ -12,7 +14,7 @@
         <li role="presentation"><a href="#ua" aria-controls="ua" role="tab" data-toggle="tab">Ua</a></li>
     </ul>
     <div class="row">
-        {!! Form::model($post, ['route' => ['posts.update', $post->id], 'method' => 'PATCH']) !!}
+        {!! Form::model($post, ['route' => ['posts.update', $post->id], 'method' => 'PATCH', 'files' => true]) !!}
         <div class="col-md-8 tab-content">
             <div role="tabpanel" class="tab-pane active" id="eng">
                 {{ Form::label('title_en', 'Title: ') }}
@@ -24,6 +26,9 @@
                 {!! Form::label('category_id', 'Category: ',  ['class' => 'form-spacing-top']) !!}
                 {!! Form::select('category_id', $categories, null, ['class' => 'form-control']) !!}
 
+                {{ Form::label('featured_image', 'Upload image') }}
+                {{ Form::file('featured_image') }}
+
                 {{ Form::label('body_en', 'Body: ', ['class' => 'form-spacing-top']) }}
                 <textarea name="body_en" id="body_en" class="form-control" required>{{ $description_en->body }}</textarea>
             </div>
@@ -31,8 +36,11 @@
                 {!! Form::label('title_ua', 'Заголовок: ') !!}
                 <input name="title_ua" type="text" class="form-control" value="{{ $description_ua->title }}">
 
-                {!! Form::label('body_ua','Контент:') !!}
-                <textarea name="body_ua" class="form-control" required>{{ $description_ua->body }}</textarea>
+                {{ Form::label('body_ua', 'Body: ', ['class' => 'form-spacing-top']) }}
+                <textarea name="body_ua" id="body_ua" class="form-control" required>{{ $description_ua->body }}</textarea>
+
+
+
             </div>
         </div>
         <div class="col-md-4">

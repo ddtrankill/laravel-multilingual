@@ -14,3 +14,5 @@
 Route::get('/','PagesController@getIndex');
 Route::resource('posts', 'PostController');
 Route::resource('categories', 'CategoryController');
+Route::get('blog/{slug}',['as' => 'blog.single', 'uses' => 'BlogController@getSingle'])->where('slug', '[\w\d\_\-]+');
+Route::get('blog',['uses' => 'BlogController@getIndex', 'as' => 'blog.index']);

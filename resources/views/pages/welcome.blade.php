@@ -16,7 +16,7 @@
                         @foreach($post->description as $description)
                             <div class="post">
                                 <h3>{{ $description->title }}</h3>
-                                <p>{{  substr($post->body, 0,250) }}{{ strlen($description->body) > 250 ? '...' : '' }}</p>
+                                <p>{{  substr(strip_tags($description->body), 0,50) }}{{ strlen(strip_tags($description->body)) > 50 ? '...' : '' }}</p>
                                 <a href="{{ url('blog/' . $post->slug) }}" class="btn btn-primary">Read more</a>
                             </div>
                         @endforeach

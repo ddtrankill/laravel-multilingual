@@ -4,6 +4,8 @@
 
 @section('stylesheets')
     {!! Html::style('css/parsley.css') !!}
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script>tinymce.init({ selector:'textarea' });</script>
 @endsection
 
 @section('content')
@@ -17,7 +19,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2 tab-content">
             <div role="tabpanel" class="tab-pane active" id="eng">
-                {!! Form::open(array('route' => 'posts.store', 'data-parsley-validate' => '')) !!}
+                {!! Form::open(array('route' => 'posts.store', 'data-parsley-validate' => '', 'files' => true)) !!}
                 {!! Form::label('title_en', 'Title: ') !!}
                 {!! Form::text('title_en', null ,array('class' => 'form-control input', 'required' => '')) !!}
 
@@ -30,6 +32,10 @@
                         <option value='{{ $category->id }}'>{{ $category->name }}</option>
                     @endforeach
                 </select>
+
+                {{ Form::label('featured_image', 'Upload image') }}
+                {{ Form::file('featured_image') }}
+
                 {{Form::label('body_en','Post body:')}}
                 {!! Form::textarea('body_en', null, ['class' => 'form-control', 'required' => '']) !!}
 

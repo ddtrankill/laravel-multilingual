@@ -6,8 +6,10 @@ use App\Description;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Post;
 use App\Category;
+use Storage;
+use Image;
+use App\Post;
 use Session;
 
 class PostController extends Controller
@@ -50,6 +52,7 @@ class PostController extends Controller
             'slug' => 'required|alpha_dash|max:255',
             'category_id' => 'required|integer',
             'body_en' => 'required',
+            'featured_image' => 'sometimes|image'
         ));
 
         $post = new Post();
@@ -57,6 +60,14 @@ class PostController extends Controller
 
         $post->slug = $request->slug;
         $post->category_id = $request->category_id;
+
+        if($request->hasFile('featured_image')){
+            $image = $request->file('featured_image');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $location = public_path('images/' . $filename);
+            Image::make($image)->resize(800, 400)->save($location);
+            $post->image = $filename;
+        }
 
         $post->save();
 
@@ -78,6 +89,8 @@ class PostController extends Controller
         $description->post_id = $post->id;
 
         $description->save();
+
+        Session::flash('success', 'This post was successfully saved.');
 
         return redirect()->route('posts.show',$post->id);
     }
@@ -130,24 +143,28 @@ class PostController extends Controller
     {
         $post = Post::find($id);
 
-        if($request->input('slug') == $post->slug){
-            $this->validate($request,[
-                'title_en' => 'required|max:255',
-                'title_ua' => 'required|max:255',
-                'category_id' => 'required|integer',
-                'body_en' => 'required'
-            ]);
-        }else {
             $this->validate($request, array(
                 'title_en' => 'required|max:255',
                 'title_ua' => 'required|max:255',
                 'category_id' => 'required|integer',
-                'slug' => 'required|alpha_dash|max:255|unique:posts,slug',
-                'body_en' => 'required'
+                'slug' => "required|alpha_dash|max:255|unique:posts,slug,$id",
+                'body_en' => 'required',
+                'featured_image' => 'sometimes|image'
             ));
-        }
+
         $post->category_id = $request->input('category_id');
         $post->slug = $request->input('slug');
+
+        if($request->hasFile('featured_image')){
+            $image = $request->file('featured_image');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            $location = public_path('images/' . $filename);
+            Image::make($image)->resize(800, 400)->save($location);
+            $oldFileName = $post->image;
+            $post->image = $filename;
+
+            Storage::delete($oldFileName);
+        }
 
         $post->save();
 
@@ -187,6 +204,7 @@ class PostController extends Controller
         $description_en->delete();
 
         $description_ua->delete();
+        Storage::delete($post->image);
         $post->delete();
 
         Session::flash('success', 'The post was successfully deleted.');
