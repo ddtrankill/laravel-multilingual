@@ -8,20 +8,21 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Category;
 use Storage;
+use Purifier;
 use Image;
 use App\Post;
 use Session;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
+
     public function index()
     {
-        $descriptions = Description::where('lang_id', 1)->get();
+        $descriptions = Description::where('lang_id', 1)->where('lang_id', Session::get('language'))->get();
 
         return view('posts.index')->withDescriptions($descriptions);
     }
@@ -72,7 +73,7 @@ class PostController extends Controller
         $post->save();
 
         $description->title = $request->title_en;
-        $description->body = $request->body_en;
+        $description->body = Purifier::clean($request->body_en);
         $description->lang_id = 1;
         $description->post_id = $post->id;
 
@@ -83,7 +84,7 @@ class PostController extends Controller
         if(empty($request->body_ua)){
             $description->body = 'Переклад відсутній';
         }else{
-            $description->body = $request->body_ua;
+            $description->body = Purifier::clean($request->body_ua);
         }
         $description->lang_id = 2;
         $description->post_id = $post->id;
@@ -104,7 +105,7 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::find($id);
-        $descriptions = Description::where('post_id',$id)->get();
+        $descriptions = Description::where('post_id',$id)->where('lang_id', Session::get('language'))->get();
 
         return view('posts.show')->withPost($post)->withDescriptions($descriptions);
     }
@@ -169,7 +170,7 @@ class PostController extends Controller
         $post->save();
 
         $description = Description::where('post_id',$id)->where('lang_id', 1)->first();
-        $description->body = $request->input('body_en');
+        $description->body = Purifier::clean($request->input('body_en'));
         $description->title = $request->input('title_en');
         $description->save();
 
@@ -178,7 +179,7 @@ class PostController extends Controller
         if(empty($request->body_ua)){
             $description2->body = 'Переклад відсутній';
         }else{
-            $description2->body = $request->input('body_en');
+            $description2->body = Purifier::clean($request->input('body_ua'));
         }
 
         $description2->save();

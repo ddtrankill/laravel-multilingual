@@ -4,7 +4,7 @@
 
 @section('stylesheets')
     {!! Html::style('css/parsley.css') !!}
-    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script src="cdn.tinymce.com/4/tinymce.min.js"></script>
     <script>tinymce.init({ selector:'textarea' });</script>
 @endsection
 
@@ -48,6 +48,7 @@
                 {!! Form::textarea('body_ua', null, array('class' => 'form-control')) !!}
 
             </div>
+            <input name="_token" type="hidden" value="{!! csrf_token() !!}" />
             {!! Form::submit('Create post', array('class' => 'btn btn-success btn-lg btn-block', 'style' => 'margin-top:20px;')) !!}
             {!! Form::close() !!}
         </div>
