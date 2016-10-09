@@ -11,15 +11,6 @@
 |
 */
 
-// Set default session language if none is set
-$lang = 1;
-if(!Session::has('language'))
-{
-    Session::put('language', $lang);
-}
-
-
-
 
 Route::get('/','PagesController@getIndex');
 Route::resource('posts', 'PostController');
@@ -33,4 +24,11 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 Route::get('logout', 'AuthController@index');
 
+//Change locales
+
+Route::get('language/{lang}/{locale}', function ($lang, $locale){
+    Session::put('language', $lang);
+    Session::put('locale', $locale);
+    return redirect()->back();
+});
 

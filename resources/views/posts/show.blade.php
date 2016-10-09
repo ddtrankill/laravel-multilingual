@@ -25,11 +25,11 @@
             </dl>
             <dl class="dl-horizontal">
                 <label>Created at:</label>
-                <p>{{ date('M j, Y  H:ia', strtotime($post->created_at)) }}</p>
+                <p>{{ date('m/j/Y  H:i', strtotime($post->created_at)) }}</p>
             </dl>
             <dl class="dl-horizontal">
                 <label>Last updated:</label>
-                <p>{{ date('M j, Y  H:ia', strtotime($post->updated_at)) }}</p>
+                <p>{{ date('m/j/Y  H:i', strtotime($post->updated_at)) }}</p>
             </dl>
             <hr>
             <div class="row">

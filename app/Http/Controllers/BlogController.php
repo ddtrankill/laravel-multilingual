@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Requests;
-use Session;
-use App\Post;
 use App\Description;
+use App\Post;
+use Session;
 
 class BlogController extends Controller
 {
@@ -20,9 +20,9 @@ class BlogController extends Controller
 
     public function getSingle($slug){
         $post = Post::where('slug', '=', $slug)->first();
-        $descriptions = Description::where('post_id',$post->id)->get();
+        $description = Description::where('post_id',$post->id)->where('lang_id', Session::get('language'))->first();
 
-        return view('blog.single')->withPost($post)->withDescriptions($descriptions);
+        return view('blog.single')->withPost($post)->withDescription($description);
     }
 }
 //

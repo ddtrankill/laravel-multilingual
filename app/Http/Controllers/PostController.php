@@ -22,7 +22,7 @@ class PostController extends Controller
 
     public function index()
     {
-        $descriptions = Description::where('lang_id', 1)->where('lang_id', Session::get('language'))->get();
+        $descriptions = Description::where('lang_id', Session::get('language'))->get();
 
         return view('posts.index')->withDescriptions($descriptions);
     }

@@ -4,12 +4,12 @@
 
 @section('stylesheets')
     {!! Html::style('css/parsley.css') !!}
-    <script src="cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
     <script>tinymce.init({ selector:'textarea' });</script>
 @endsection
 
 @section('content')
-    <h1>Create new post</h1>
+    <h1>@lang('translation.new_post')</h1>
 
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active"><a href="#eng" aria-controls="eng" role="tab" data-toggle="tab">Eng</a></li>
